@@ -1,5 +1,5 @@
 # 2018SUMMER_R
 > INFORMATIONS
-* Name:´å³Õµ¾(Cartus You)
+* Name: Cartus You
 * ID: B06208002
 * GROUP:

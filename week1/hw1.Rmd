@@ -4,12 +4,12 @@ author: "CARTUS YOU"
 date: "2018年7月10日"
 output: html_document
 ---
-[TEACHER:蔡芸琤](pecutsai@ntu.edu.tw)
-[TA:萬俊彥](michaelwan0906@gmail.com),[TA:王冠人](b06201038@ntu.edu.tw)
+* TEACHER:蔡芸琤(pecutsai@ntu.edu.tw)
+* TA:萬俊彥(michaelwan0906@gmail.com),王冠人(b06201038@ntu.edu.tw)
 ***
 > BASIC INFORMATIONS
 * IDE:RStudio
-*           HELPFUL Fun.     |       FUNCTION
+            HELPFUL Fun.     |       FUNCTION
   ---------------------------|----------------------
   help("<function name>")    |Instruction
   args("<function name>")    |Find parameters
@@ -22,4 +22,4 @@ output: html_document
 * Text (or string) values are called characters.
 
 > SYNTAX OF R_MARKDOWN
-![](D:/2018.07 R語言資料分析/to/4af561d8-1a08-44bf-8ca1-0a7f95adb3e2)
+[link](http://packetlife.net/media/library/16/Markdown.pdf)
