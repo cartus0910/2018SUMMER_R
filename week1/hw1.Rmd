@@ -9,7 +9,9 @@ output: html_document
 ***
 
 > BASIC INFORMATIONS
+
 * IDE:RStudio
+
 * HELPFUL Fun.               |FUNCTION
   ---------------------------|----------------------
   help("<function name>")    |Instruction
@@ -17,10 +19,12 @@ output: html_document
   example("<function name>") |Find exemples
 
 > VARIABLES TYPES
+
 * Decimals values like 4.5 are called numerics.
 * Natural numbers like 4 are called integers. Integers are also numerics.
 * Boolean values (TRUE or FALSE) are called logical.
 * Text (or string) values are called characters.
 
 > SYNTAX OF R_MARKDOWN
+
 [link](http://packetlife.net/media/library/16/Markdown.pdf)
