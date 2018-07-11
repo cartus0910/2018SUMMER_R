@@ -20,3 +20,14 @@
 * Create folder as week1
 * Add hw1.Rmd as a note of this week
 * [hw_link](https://cartus0910.github.io/2018SUMMER_R/week1/hw1.html)
+
+## WEEK 2
+[week2_link](https://n2-data-science-programming.gitbook.io/rsummer/week_2)
+> PREPARE
+* Install packages:ggplot, ggmap, scales
+* Read the Document of ggplot
+
+> EXERCISES
+* Use the build-in dataframe: diamond
+* draw several diagrams including: bar, histogram, point, boxplot
+* [exercise_link](https://cartus0910.github.io/2018SUMMER_R/week2/0711morning.html)
