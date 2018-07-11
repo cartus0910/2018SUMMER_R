@@ -19,3 +19,4 @@
 * Create repository for this class
 * Create folder as week1
 * Add hw1.Rmd as a note of this week
+* [hw_link](https://cartus0910.github.io/2018SUMMER_R/week1/hw1.html)
