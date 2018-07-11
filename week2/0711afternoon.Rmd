@@ -72,26 +72,23 @@ docs <- tm_map(docs, toSpace, "作者")
 docs <- tm_map(docs, toSpace, "發信站")
 docs <- tm_map(docs, toSpace, "批踢踢實業坊")
 docs <- tm_map(docs, toSpace, "[a-zA-Z]")
-docs <- tm_map(docs, toSpace, "推")
-docs <- tm_map(docs, toSpace, "有")
-docs <- tm_map(docs, toSpace, "就")
-docs <- tm_map(docs, toSpace, "了")
-docs <- tm_map(docs, toSpace, "不")
-docs <- tm_map(docs, toSpace, "在")
-docs <- tm_map(docs, toSpace, "都")
-docs <- tm_map(docs, toSpace, "也")
-docs <- tm_map(docs, toSpace, "很")
-docs <- tm_map(docs, toSpace, "們")
-docs <- tm_map(docs, toSpace, "到")
+docs <- tm_map(docs, toSpace, "可以")
+docs <- tm_map(docs, toSpace, "因為")
+docs <- tm_map(docs, toSpace, "所以")
+docs <- tm_map(docs, toSpace, "已經")
+docs <- tm_map(docs, toSpace, "一個")
+docs <- tm_map(docs, toSpace, "大家")
+docs <- tm_map(docs, toSpace, "一下")
+docs <- tm_map(docs, toSpace, "這個")
+docs <- tm_map(docs, toSpace, "這樣")
+docs <- tm_map(docs, toSpace, "好像")
+docs <- tm_map(docs, toSpace, "而且")
 #移除標點符號 (punctuation)
 #移除數字 (digits)、空白 (white space)
 docs <- tm_map(docs, removePunctuation)
 docs <- tm_map(docs, removeNumbers)
 docs <- tm_map(docs, stripWhitespace)
-```
 
-```{R}
-#calculate words
 mixseg = worker()
 jieba_tokenizer=function(d){
   unlist(segment(d[[1]],mixseg))
@@ -104,6 +101,13 @@ kable(head(freqFrame), format = "markdown")
 ```
 
 ```{R}
-#create wordcloud
-wordcloud2(freqFrame, minSize=10, gridSize=5)
+#select character that larger than 1
+library(stringr)
+new_freqFrame = subset(freqFrame, nchar(str_sub(freqFrame$Var1))>=2)
+kable(head(new_freqFrame), format = "markdown")
+```
+
+```{R}
+library(wordcloud2)
+wordcloud2(new_freqFrame, minSize=10, gridSize=5)
 ```
