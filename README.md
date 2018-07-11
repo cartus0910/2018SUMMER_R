@@ -4,7 +4,8 @@
 * ID: B06208002
 * GROUP:
 
-##[WEEK 1](https://n2-data-science-programming.gitbook.io/rsummer/week_1)
+##WEEK 1
+[week1_link](https://n2-data-science-programming.gitbook.io/rsummer/week_1)
 > PREPARE
 * Download R & RStudio
 * Read the reserved words in R
