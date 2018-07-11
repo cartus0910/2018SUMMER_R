@@ -1,12 +1,13 @@
 ---
 title: "R LANGUAGE NOTE"
 author: "CARTUS YOU"
-date: "2018¦~7¤ë10¤é"
+date: "2018å¹´7æœˆ10æ—¥"
 output: html_document
 ---
-* TEACHER:½²ªåÚ¥(pecutsai@ntu.edu.tw)
-* TA:¸U«T«Û(michaelwan0906@gmail.com),¤ý«a¤H(b06201038@ntu.edu.tw)
+* TEACHER:è”¡èŠ¸ç¤(pecutsai@ntu.edu.tw)
+* TA:è¬ä¿Šå½¥(michaelwan0906@gmail.com),çŽ‹å† äºº(b06201038@ntu.edu.tw)
 ***
+
 > BASIC INFORMATIONS
 * IDE:RStudio
 * HELPFUL Fun.               |FUNCTION
