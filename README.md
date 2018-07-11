@@ -2,8 +2,8 @@
 > INFORMATIONS
 * Name: Cartus You
 * ID: B06208002
-Dep.:NTU Geography
-* GROUP: with [王良軒](https://github.com/jason10130021/CS-X_106_Summer), [張銚軒](https://github.com/NTU-CSX-DataScience/106Summer/blob/master)
+* Dep.:NTU Geography
+* GROUP member: [王良軒](https://github.com/jason10130021/CS-X_106_Summer), [張銚軒](https://github.com/NTU-CSX-DataScience/106Summer/blob/master)
 
 ## WEEK 1
 [week1_link](https://n2-data-science-programming.gitbook.io/rsummer/week_1)
