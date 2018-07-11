@@ -27,7 +27,14 @@
 * Install packages:ggplot, ggmap, scales
 * Read the Document of ggplot
 
-> EXERCISES
+> EXERCISES_MORNING
 * Use the build-in dataframe: diamond
 * draw several diagrams including: bar, histogram, point, boxplot
-* [exercise_link](https://cartus0910.github.io/2018SUMMER_R/week2/0711morning.html)
+* [exercise_part1_link](https://cartus0910.github.io/2018SUMMER_R/week2/0711morning.html)
+
+> EXERCISES_AFTERNOON
+* Create function to connect URL
+* Use function to crawl the website
+* Organizing data by filtering out unnecessary data
+* Create wordcloud
+* [exercise_part2_link](https://cartus0910.github.io/2018SUMMER_R/week2/0711afternoon.html)
