@@ -1,0 +1,35 @@
+---
+title: "Untitled"
+author: "CARTUS YOU"
+date: "2018¦~7¤ë11¤é"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+diamonds
+
+#1st diagram
+ggplot(data=diamonds, aes(x=color))+
+geom_bar(fill='orange', colour='darkgray',alpha=0.8, width=0.5)
+
+args('geom_bar')
+
+#2nd diagram
+ggplot(data=diamonds, aes(x=carat))+
+geom_histogram(fill='limegreen')
+
+args('geom_histogram')
+
+#3rd diagram
+ggplot(data=diamonds, aes(x=carat, y=price)) +
+geom_point(aes(colour=clarity))
+
+args('geom_point')
+
+#4th diagram
+ggplot(data=diamonds, aes(x=cut, y=depth)) +
+geom_boxplot(colour='black', coef=2.5, outlier.colour='dimgray')
+
+args('geom_boxplot')
+```
