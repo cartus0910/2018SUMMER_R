@@ -39,3 +39,10 @@
 * Organizing data by filtering out unnecessary data
 * Create wordcloud
 * [exercise_part2_link](https://cartus0910.github.io/2018SUMMER_R/week2/0711afternoon.html)
+
+> EXTRA
+* Calculate the most-used words in the title of thesis in NTU Geography
+* Download data from [National Digital Library of Theses And Dessertation in Taiwan](https://etds.ncl.edu.tw/cgi-bin/gs32/gsweb.cgi/ccd=MFzs7f/webmge?switchlang=en)
+* Import the data as .csv
+* Create wordcloud and lettercloud (NOTE: The letter cloud cannot adjust the word size relatively to the frequency)
+* [extra_practice_link](https://cartus0910.github.io/2018SUMMER_R/week2/geog_paper.html)
