@@ -69,7 +69,8 @@
 * Crawl the data from PTT movie boards.
 * Restore the content by the time of posting(hours).
 * Calculate TF and IDF for the data and create TF-IDF matrix for each hours.
-* [exercise_part2_link](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon_only_TF-IDF_.html)**Note that this only include TF-IDF process**
+* [exercise_part2_link](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon_only_TF-IDF_.html)
+**Note that this only include TF-IDF process**
 * Get the introduction of best selling books in 5 popular online book store(誠品:C、博客來:B、TAAZE:T、城邦:P、金石堂:J).
 * Calculate TF and IDF for the data and create TF-IDF matrix for each book introduction.
 * Create the word cloud to see the key words in all document.
@@ -77,4 +78,5 @@
 * Plot the result to check the degree of decentralization.
 * Determine optimal number of clusters
 * Use k-means to classify each introductions into 5 clusters
-* [exercise_part3_link](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon.html)**This is the HW with process of TFIDF -> PCA -> K-means**
+* [exercise_part3_link](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon.html)
+**This is the HW with process of TFIDF -> PCA -> K-means**
