@@ -51,3 +51,30 @@
 * Download the data of Debris Flow Monitoring Station
 * Use ggplot to plot the stations on the map
 * [extra_practice_link2](https://cartus0910.github.io/2018SUMMER_R/week2/0717MAP)
+
+## WEEK 3
+[week3_link](https://n2-data-science-programming.gitbook.io/rsummer/week_3)
+> PREPARE
+* Read the document of EDA, TI-IDF, PCA, K-means.
+* Review the homework last week.
+
+> EXERCISES_MORNING
+* Download data from [新北市歷年重大災害一覽表](https://data.gov.tw/dataset/33645), [遭受災害救助情形](https://data.gov.tw/dataset/56813)
+* Determine the purpose: Find out whether the intervals in which the major disaster happened have higher emergency allowance.
+* Found conclusion: No, there is no positive correlation between the two.
+* Check the data and point out the deficiency of the original data.
+* [exercise_part1_link](https://cartus0910.github.io/2018SUMMER_R/week3/0718morning.html)
+
+> EXERCISES_AFTERNOON
+* Crawl the data from PTT movie boards.
+* Restore the content by the time of posting(hours).
+* Calculate TF and IDF for the data and create TF-IDF matrix for each hours.
+* [exercise_part2_link](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon_only_TF-IDF_.html)**Note that this only include TF-IDF process**
+* Get the introduction of best selling books in 5 popular online book store(誠品:C、博客來:B、TAAZE:T、城邦:P、金石堂:J).
+* Calculate TF and IDF for the data and create TF-IDF matrix for each book introduction.
+* Create the word cloud to see the key words in all document.
+* Use PCA to reduce the dimensionality.
+* Plot the result to check the degree of decentralization.
+* Determine optimal number of clusters
+* Use k-means to classify each introductions into 5 clusters
+* [exercise_part3_link](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon.html)**This is the HW with process of TFIDF -> PCA -> K-means**
