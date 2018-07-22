@@ -12,14 +12,14 @@ season <- c(' 全年', ' 第一季', ' 第二季', ' 第三季', ' 第四季')
 s_month <- c('.01', '.01', '.04', '.07', '.10')
 e_month <- c('.12', '.03', '.06', '.09', '.12')
 
-DNH$startmonth <- gsub(season[1], s_month[1], as.character(DNH$期間))
+DNH$startmonth <- gsub(season[1], s_month[1], as.character(DNH$Interval))
 DNH$startmonth <- gsub(season[2], s_month[2], as.character(DNH$startmonth))
 DNH$startmonth <- gsub(season[3], s_month[3], as.character(DNH$startmonth))
 DNH$startmonth <- gsub(season[4], s_month[4], as.character(DNH$startmonth))
 DNH$startmonth <- gsub(season[5], s_month[5], as.character(DNH$startmonth))
 DNH$startmonth <- as.numeric(DNH$startmonth) - 1911
 
-DNH$endmonth <- gsub(season[1], e_month[1], as.character(DNH$期間))
+DNH$endmonth <- gsub(season[1], e_month[1], as.character(DNH$Interval))
 DNH$endmonth <- gsub(season[2], e_month[2], as.character(DNH$endmonth))
 DNH$endmonth <- gsub(season[3], e_month[3], as.character(DNH$endmonth))
 DNH$endmonth <- gsub(season[4], e_month[4], as.character(DNH$endmonth))
@@ -36,7 +36,7 @@ for(i in 1:nrow(DN)){
   }
 }
 DNH$exaggerated <- as.numeric(as.character(unlist(DNH$weighted * DNH$exag_rate)))
-DNH$avg <- as.numeric(as.character(unlist(DNH$救助金額_新臺幣千元_ / DNH$exaggerated)))
+DNH$avg <- as.numeric(as.character(unlist(DNH$Allowance_1000NTD / DNH$exaggerated)))
 
 library(ggplot2)
 ggplot(data=DNH, aes(x=exag_rate, y=avg))+

@@ -1,3 +1,20 @@
+---
+title: "Best-Selling Books' Introduction"
+author: "CARTUS YOU"
+date: "2018年7月22日"
+output: html_document
+---
+
+## Purpose
+
+Analyze the **introduction of the Top 10 best selling books** in 5 online book stores(誠品:C、博客來:B、TAAZE:T、城邦:P、金石堂:J). Note that even a same book could still have different introductions in different online stores.
+
+> Preparation
+
+* Set the working direction.
+* Import data to create Corpus.
+* Create TermDocumentMatrix from the Corpus.
+```{r}
 setwd('D:/2018.07 R_DataAnalysis/2018SUMMER_R/data')
 
 library(tm)
@@ -8,14 +25,27 @@ library(Matrix)
 docs.corpus <- Corpus(DirSource("./0718", encoding = 'UTF-8'))
 docs.seg <- tm_map(docs.corpus, segmentCN)
 docs.tdm <- TermDocumentMatrix(docs.seg)
+docs.tdm
+```
 
+> Create TF-IDF Matrix
+
+* Calculate the terms frequency in TDM.
+* Calculate the inverse document frequency in TDM.
+* Maltiply tf and idf to create TF-IDF Matrix.
+```{r}
 docs.tf <- apply(as.matrix(docs.tdm), 2, function(word) { word/sum(word) })
 idf <- function(doc) {
   return ( log2( length(doc)+1 / nnzero(doc)) )
 }
 docs.idf <- apply(as.matrix(docs.tdm), 1, idf)
 docs.tfidf <- docs.tf * docs.idf
+```
 
+> Create Wordcloud
+
+* Create the word cloud to see the key words in all document.
+```{r}
 library(wordcloud2)
 f <- sort(rowSums(docs.tfidf), decreasing = T)
 docs.df <- data.frame(
@@ -24,13 +54,24 @@ docs.df <- data.frame(
 )
 wordcloud2(docs.df, minSize=10, gridSize=5, fontFamily = "微軟正黑體",
            backgroundColor='black', color='random-light')
+```
 
+> Principal Components Analysis(PCA)
+
+* Use PCA to reduce the dimensionality.
+* Plot the result to check the degree of decentralization.
+```{r}
 docs.pca <- prcomp(docs.tfidf, scale = T)
 fviz_eig(docs.pca)
 fviz_pca_ind(docs.pca, geom.ind = c("point"), col.ind = "cos2")
 fviz_pca_var(docs.pca, col.var = "contrib")
 fviz_pca_biplot(docs.pca, geom.ind = "point")
+```
 
+> K-means
+
+*Determine optimal number of clusters
+```{r}
 docs.eig <- get_eig(docs.pca)
 docs.var <- get_pca_var(docs.pca)
 docs.ind <- get_pca_ind(docs.pca)
@@ -38,10 +79,17 @@ ind.coord2 <- docs.ind$coord[, 1:2]
 wss <- c()
 for (i in 1:10) { wss[i] <- kmeans(ind.coord2, i)$tot.withinss }
 plot(wss, type = "b")
+```
 
+* Use k-means to classify each introductions into 5 clusters
+```{r}
 km <- kmeans(ind.coord2, 5)
 plot(ind.coord2, col = km$cluster)
 points(km$centers, col = 1:3, pch = 8, cex = 2)
+
+```
+
+
 
 
 

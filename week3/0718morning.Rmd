@@ -5,14 +5,15 @@ date: "2018年7月19日"
 output: html_document
 ---
 
-# BASIC ASSUMPTIONS:
-###   If there is a major disaster happening in the interval, then there should be relatively more emergency allowances in that interval, since the press would report the major disaster more often, and the public woulb more concern about the victims, which could urge the government increasing the emergency allowance.
+## **Basic Assumptions**
+   If there is a major disaster happening in the interval, then there should be **relatively more emergency allowances** in that interval, since the press would report the major disaster more often, and the public woulb more concern about the victims, which could urge the government increasing the emergency allowance.
 
 ***
 
-> Preparation
+> **Preparation**
 
 * Set the working direction and import data.
+* DN is the major disaster
 ```{r}
 setwd('D:/2018.07 R_DataAnalysis/2018SUMMER_R/data')
 
@@ -21,7 +22,7 @@ DN <- read_csv("Disaster_NewTaipei.csv")
 DNH <- read_csv("Disaster_NewTaipei_Help.csv")
 ```
 
-> Organizing Data
+> **Organizing Data**
 
 * Turn the time in DN into form as 'xxx.xx'.
 * Create weighted sum by Multiplicating.
@@ -36,14 +37,14 @@ season <- c(' 全年', ' 第一季', ' 第二季', ' 第三季', ' 第四季')
 s_month <- c('.01', '.01', '.04', '.07', '.10')
 e_month <- c('.12', '.03', '.06', '.09', '.12')
 
-DNH$startmonth <- gsub(season[1], s_month[1], as.character(DNH$期間))
+DNH$startmonth <- gsub(season[1], s_month[1], as.character(DNH$Interval))
 DNH$startmonth <- gsub(season[2], s_month[2], as.character(DNH$startmonth))
 DNH$startmonth <- gsub(season[3], s_month[3], as.character(DNH$startmonth))
 DNH$startmonth <- gsub(season[4], s_month[4], as.character(DNH$startmonth))
 DNH$startmonth <- gsub(season[5], s_month[5], as.character(DNH$startmonth))
 DNH$startmonth <- as.numeric(DNH$startmonth) - 1911
 
-DNH$endmonth <- gsub(season[1], e_month[1], as.character(DNH$期間))
+DNH$endmonth <- gsub(season[1], e_month[1], as.character(DNH$Interval))
 DNH$endmonth <- gsub(season[2], e_month[2], as.character(DNH$endmonth))
 DNH$endmonth <- gsub(season[3], e_month[3], as.character(DNH$endmonth))
 DNH$endmonth <- gsub(season[4], e_month[4], as.character(DNH$endmonth))
@@ -52,7 +53,7 @@ DNH$endmonth <- as.numeric(DNH$endmonth) - 1911
 head(DNH)
 ```
 
-> Calculatation
+> **Calculatation**
 
 * Find the rate of possible exaggeration due to the report by adding the percentage of disaster weighted sum in weighted sum in that interval.
 ```{r}
@@ -71,13 +72,14 @@ head(DNH)
 * Calculate the exaggerated weighted sum and find the average of emergency allowances for each unit.
 ```{r}
 DNH$exaggerated <- as.numeric(as.character(unlist(DNH$weighted * DNH$exag_rate)))
-DNH$avg <- as.numeric(as.character(unlist(DNH$救助金額_新臺幣千元_ / DNH$exaggerated)))
+DNH$avg <- as.numeric(as.character(unlist(DNH$Allowance_1000NTD / DNH$exaggerated)))
 ```
 
 
-> Plotting
+> **Plotting**
 
 * Plot a scatter plot with exaggerated rate and the average of emergency allowance for each unit
+* If the assumption is right, the intervals with higher exaggerated rate(in which a major disaster happened) will have a higher average emergency allowance.
 ```{r}
 library(ggplot2)
 ggplot(data=DNH, aes(x=exag_rate, y=avg))+
@@ -87,8 +89,8 @@ ggplot(data=DNH, aes(x=exag_rate, y=avg))+
 
 ***
 
-# Conclusion
-### The assumption is wrong because we can't see the positive correlation in the plot.
-### WHY? Probably due to 八仙塵暴&復興空難 are not natural disaster, which should be subsidize by the government
-### Instead, the victims of the two disaster could ask for compensation from the company which should be responsible for.
-### Thus, the compensation is not included in the data, but the amount the victims is. For the intervals which these two event happended in, though having high exaggerated rate, but the emergency allowance is not high at all.
+## **Conclusion**
+  1. The assumption is **wrong** because **we can't see the positive correlation** in the plot.
+  2. WHY? Probably becuase 八仙塵暴&復興空難 are **not natural disaster**, which should be subsidize by the government
+  3 Instead, the victims of the two disaster could ask for **compensation from the company** which should be responsible for.
+  4. Thus, **the compensation is not included in the data, while the amount the victims is**. For the intervals which these two event happended in, though having high exaggerated rate, but the emergency allowance is not higher at all.
