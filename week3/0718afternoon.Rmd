@@ -70,7 +70,7 @@ fviz_pca_biplot(docs.pca, geom.ind = "point")
 
 > K-means
 
-*Determine optimal number of clusters
+* Determine optimal number of clusters
 ```{r}
 docs.eig <- get_eig(docs.pca)
 docs.var <- get_pca_var(docs.pca)
