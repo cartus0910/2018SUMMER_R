@@ -1,0 +1,112 @@
+---
+title: "Alcohol Consumption and Grades"
+author: "CARTUS YOU"
+date: "2018年7月27日"
+output: html_document
+---
+
+## **Purpose**
+Examines whether alcohol consumption has any predictive power over student average grades.
+
+***
+
+> **Preparation**
+
+* Set the working direction and import data.
+* Merge the data by columns but not including which related to grdes, since we don't know whether the alcohol assumption have different influence between math and portugueses grades yet.
+```{r}
+setwd("D:/2018.07 R_DataAnalysis/2018SUMMER_R/data")
+
+ptgs.course <- read.csv("student-por.csv")
+math.course <- read.csv("student-mat.csv")
+
+data.source <- merge(ptgs.course,math.course,by=c("school","sex","age","address","famsize","Pstatus",
+                                                  "Medu","Fedu","Mjob","Fjob","reason","nursery","internet",
+                                                  "guardian","guardian","traveltime","studytime","failures",
+                                                  "schoolsup","famsup","activities","higher","romantic",
+                                                  "famrel","freetime","goout","Dalc","Walc","health","absences"))
+head(data.source)
+```
+```{r}
+summary(data.source)
+```
+
+> **EDA**
+
+* Calculate the mean of both grades.
+* Change the expression of alcohol assumption.
+```{r include=FALSE}
+data.source$mathgrades=rowMeans(cbind(data.source$G1.x,data.source$G2.x,data.source$G3.x))
+data.source$portgrades=rowMeans(cbind(data.source$G1.y,data.source$G2.y,data.source$G3.y))
+
+library(plyr)
+data.source$Dalc <- as.factor(data.source$Dalc)      
+data.source$Dalc <- mapvalues(data.source$Dalc, 
+                              from = 1:5, 
+                              to = c("Very Low", "Low", "Medium", "High", "Very High"))
+data.source$Walc <- as.factor(data.source$Walc)      
+data.source$Walc <- mapvalues(data.source$Walc, 
+                              from = 1:5, 
+                              to = c("Very Low", "Low", "Medium", "High", "Very High"))
+```
+
+> **Plot**
+
+* Plot a sacatter to see the relationships bwtween alcohol assumption and grades.
+* The two scatter plots have few implications:
+  1. Among the 85 students, no one consumed high or very high levels of alcohol on daily basis.
+  2. Almost all of those who earned relatively high scores consumed very low levels of alcohol on weekdays.
+  3. Math and Portuguese grades seem to correlate highly with each other.
+```{r}
+library(ggplot2)
+str1=ggplot(data.source, aes(x=mathgrades, y=portgrades)) +
+  geom_point(aes(colour=factor(Dalc)))+ scale_colour_hue(l=25,c=150)+
+  geom_smooth(method = "lm", se = FALSE)
+str2=ggplot(data.source, aes(x=mathgrades, y=portgrades))+
+  geom_point(aes(colour=factor(Walc)))+ scale_colour_hue(l=25,c=150)+
+  geom_smooth(method = "lm", se = FALSE)
+library(gridExtra)
+grid.arrange(str1,str2,nrow=2)
+```
+* By the implication 3, I think that it's acceptable to combine the two grades together without worrying the lost of features.
+* To be cautious, I still calculated the adjusted R squared to make sure it works.
+* The R squared is about 0.55, which means that the correlation coefficient between math and Portuguese grades is about 0.74 and that about 55% of the variation in Portuguese grades can be explained by the variation in math grades.
+```{r}
+r.sqr <- lm(mathgrades ~ portgrades, data=data.source)
+print(summary(r.sqr)$r.squared)
+print(sqrt(summary(r.sqr)$r.squared))
+```
+
+> **Create New Dataframe**
+
+* Combine the original data by rows.
+* Create a new column(alcohol) to separate the students into two groups:having alcoholic assumption, and not.
+```{r}
+library(dplyr)
+new.source <-rbind(math.course, ptgs.course) #combine the two datasets
+# and eliminate the repeats:
+apply.source <- new.source %>% distinct(school,sex,age,address,famsize,Pstatus,Medu,Fedu,Mjob,Fjob,reason,
+                                        guardian,traveltime,studytime,failures,schoolsup,
+                                        famsup,activities,nursery,higher,internet,romantic,
+                                        famrel,freetime,goout,Dalc,Walc,health,absences, .keep_all = TRUE)
+apply.source$avggrades <- rowMeans(cbind(apply.source$G1,apply.source$G2,apply.source$G3))
+apply.source$alcohol <- apply.source$Dalc + apply.source$Walc
+apply.source$alcohol <- as.factor(apply.source$alcohol)
+apply.source$alc <- mapvalues(apply.source$alcohol, 
+                              from = 2:10,
+                              to = c("no","yes","yes","yes","yes","yes","yes","yes","yes"))
+head(apply.source)
+```
+
+
+> **T-Test**
+
+* Is having alcoholic assumption or not influence the their academic performance?
+* P-value < 0.05
+```{r}
+t.test(avggrades ~ alc, data=apply.source)
+```
+
+
+
+
