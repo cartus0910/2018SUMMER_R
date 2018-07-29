@@ -3,7 +3,6 @@
 * Name: Cartus You
 * ID: B06208002
 * Dep.:NTU Geography
-* GROUP member: [王良軒](https://github.com/jason10130021/CS-X_106_Summer), [張銚軒](https://github.com/NTU-CSX-DataScience/106Summer/blob/master)
 
 ## WEEK 1
 [week1_link](https://n2-data-science-programming.gitbook.io/rsummer/week_1)
@@ -80,3 +79,37 @@
 * Use k-means to classify each introductions into 5 clusters
 * [exercise_part3_link](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon.html)
 (**This is the HW with process of TFIDF -> PCA -> K-means**)
+
+
+## WEEK 4
+[week4_link](https://n2-data-science-programming.gitbook.io/rsummer/week_4)
+> PREPARE
+* Download data from [Student Alcohol Consumption Survey](https://www.kaggle.com/uciml/student-alcohol-consumption).
+* Set the initial purpose of this project: Examines whether alcohol consumption has any predictive power over student average grades.
+
+> EXERCISES
+* Use EDA to organizing the data.
+* Plot to see the relationships bwtween alcohol consumption and grades.
+* Combine the two grades together without worrying the lost of features after calculated the adjusted R squared to make sure it works.
+* Run T-test to see whether having alcohol consumption or not influence the their academic performance?
+* Set h0 = "Having alcohol consumption or not will not influence the their academic performance?" and h1 = "Having alcohol consumption or not will influence the their academic performance?"
+* P-value < 0.05, so h0 is rejected in favor of h1 within the 95% confidence interval.
+* Plot to see how workday and weekend alcohol consumption influence on average grades.
+* Conclude that levels of alcohol consumption have a limited predict power over their grades.
+* Set the purpose for next stage:
+  1. Examine which variable has the most predicative power over student grades.
+  2. Build model to predict the grades.
+* Use linear model to find the variables having significant impact on grades, which are studytime, schoolsup(Extra educational support), higher(Wants to take higher education).
+* Check the three variables found above is more important in this model using ANOVA.
+* Find out that aiming to having higher education or not is the most important variable.
+* Build a regression tree model to see how the top important variables affect the grades.
+* Calculate normalized mean squared error to see the accuracy of these two models.
+* Plot to see how these two models work, and see that they are not quite predictive.
+* Build Random Forest model instead.
+* Calculate the NMSE of this model, and then get the result of about 0.2, which indicate that this model is more valid than the ones above.
+* Plot to see that random forest model works well comparing to the others, though it seems to underpredict the grades of the group of lower grades student, and overpredict the grades of the group of higher grades students.
+* Plot to see which variables are important in this model.
+* Produce a partial dependence plot for each feature in the best performing Random Forest model with 500 trees., giving a graphical depiction of the marginal effect of a feature on the response.
+* Give a look at some features which would be conventionally thought as important using correlational plot.
+* Got the conclusion!
+* [exercise_link](https://cartus0910.github.io/2018SUMMER_R/week4/0725morning.html)
