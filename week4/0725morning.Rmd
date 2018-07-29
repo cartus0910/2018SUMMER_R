@@ -68,6 +68,7 @@ str2=ggplot(data.source, aes(x=mathgrades, y=portgrades))+
 library(gridExtra)
 grid.arrange(str1,str2,nrow=2)
 ```
+
 * By the implication 3, I think that **it's acceptable to combine the two grades together** without worrying the lost of features.
 * To be cautious, I still calculated the adjusted R squared to make sure it works.
 * The R squared is about 0.55, which means that the correlation coefficient between math and Portuguese grades is **about 0.74 and that about 55% of the variation** in Portuguese grades can be explained by the variation in math grades.
@@ -273,7 +274,7 @@ grid.arrange(errplt.rf1, errplt.lm1,errplt.rt1,nrow=3)
 
 ```
 
-> #### **Relative Importance in Random Forest Model
+> #### **Relative Importance in Random Forest Model**
 
 * Now I'll plot to see **which variables are important** in this model
 * As you can see the relatively high important variables are below:
@@ -287,7 +288,7 @@ grid.arrange(errplt.rf1, errplt.lm1,errplt.rt1,nrow=3)
 varImpPlot(rf2,type=1)
 ```
 
-> Partial Dependance
+> #### **Partial Dependance**
 
 * Now I am going to produce a partial dependence plot for each feature in the best performing Random Forest model with 500 trees., giving a graphical depiction of **the marginal effect** of a feature on the response.
 ```{r}
@@ -303,7 +304,7 @@ par(op)
 
 ```
 
-> Correlation Plot
+> #### **Correlation Plot**
 
 * Now give a look at some features which would be **conventionally thought as important**.
 * As the numerous models and tests above shows, these features are **not important at all**.
