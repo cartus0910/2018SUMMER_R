@@ -39,8 +39,8 @@ str2=ggplot(data.source, aes(x=mathgrades, y=portgrades))+
   geom_smooth(method = "lm", se = FALSE)
 library(gridExtra)
 grid.arrange(str1,str2,nrow=2)
-r.sqr <- lm(mathgrades ~ portgrades, data=data.source)
-summary(r.sqr)$r.squared 
+reg1 <- lm(mathgrades ~ portgrades, data=data.source)
+summary(reg1)$r.squared 
 
 library(dplyr)
 new.source <-rbind(math.course, ptgs.course) #combine the two datasets
@@ -59,7 +59,121 @@ head(apply.source)
 
 t.test(avggrades ~ alc, data=apply.source)
 
+str3=ggplot(apply.source, aes(x=Dalc, y=avggrades, group=Dalc)) +
+  geom_boxplot() + theme(legend.position="none") + scale_fill_manual(values=waffle.col) +
+  xlab("Alcohol consumption") + ylab("Daily Average Grades") + ggtitle("Average Grade")
+str4=ggplot(apply.source, aes(x=Walc, y=avggrades, group=Walc)) +
+  geom_boxplot() + theme(legend.position="none") + scale_fill_manual(values=waffle.col) +
+  xlab("Alcohol consumption") + ylab("Weekend Average Grades") + ggtitle("Average Grade")
+grid.arrange(str3,str4,nrow=2)
 
+failureind <- which(names(apply.source)=="failures")
+apply.source <- apply.source[,-failureind]
+
+reg2 <- lm(apply.source$avggrades ~ ., data=apply.source[, 1:29])
+summary(reg2)
+
+m1 <- lm(apply.source$avggrades ~ studytime, data=apply.source)
+m2 <- lm(apply.source$avggrades ~ higher, data=apply.source)
+m3 <- lm(apply.source$avggrades ~ schoolsup, data=apply.source)
+m4 <- update(m3, . ~ . + studytime + higher,  data = apply.source)
+res_lm <- lapply(list(m1, m2, m3, m4), summary)
+(res_lm[[4]]$r.sq - res_lm[[1]]$r.sq)/res_lm[[4]]$r.sq
+anova(m1, m4)
+(res_lm[[4]]$r.sq - res_lm[[2]]$r.sq)/res_lm[[4]]$r.sq
+anova(m2, m4)
+(res_lm[[4]]$r.sq - res_lm[[3]]$r.sq)/res_lm[[4]]$r.sq
+anova(m3, m4)
+
+library(rpart)
+library(DMwR)
+regtree <- rpart(apply.source$avggrades~., data=apply.source[,1:29])
+prettyTree(regtree)
+
+#predictions
+apply.source$Dalc <- as.numeric(apply.source$Dalc)
+lm.predictions <- predict(reg2,apply.source)
+rt.predictions <- predict(regtree,apply.source)
+nmse.lm<-mean((lm.predictions-apply.source[,"avggrades"])^2)/mean(
+  (mean(apply.source$avggrades)-apply.source[,"avggrades"])^2)
+nmse.rt<-mean((rt.predictions-apply.source[,"avggrades"])^2)/mean(
+  (mean(apply.source$avggrades)-apply.source[,"avggrades"])^2)
+print(nmse.lm) #0.79
+print(nmse.rt) #0.85
+
+lm.plt.data1=data.frame(cbind(lm.predictions,apply.source[,"avggrades"]))
+colnames(lm.plt.data1) <- c("lm.predictions","avggrades")
+rt.plt.data1=data.frame(cbind(rt.predictions,apply.source[,"avggrades"]))
+colnames(rt.plt.data1) <- c("rt.predictions","avggrades")
+
+apply.source$Dalc <- as.factor(apply.source$Dalc)
+
+errplt.lm1 <- ggplot(lm.plt.data1,aes(lm.predictions,avggrades))+
+  geom_point(aes(color=apply.source[,"Dalc"]))+
+  xlab("Predicted Grades (Linear Model)")+
+  ylab("Actual Grades")+
+  geom_abline(intercept=0,slope=1,color="#00cc4e",size=1)+
+  scale_colour_brewer(palette = "Set1",name = "Daily Alcohol \nConsumption")
+
+errplt.rt1 <- ggplot(rt.plt.data1,aes(rt.predictions,avggrades))+
+  geom_point(aes(color=apply.source[,"Dalc"]))+
+  xlab("Predicted Grades (Regression Tree)")+
+  ylab("Actual Grades")+
+  geom_abline(intercept=0,slope=1,color="#00cc4e",size=1)+
+  scale_colour_brewer(palette = "Set1",name = "Daily Alcohol \nConsumption")
+
+grid.arrange(errplt.lm1,errplt.rt1,nrow=2)
+
+library(randomForest)
+set.seed(8000)
+rf2 <- randomForest(apply.source$avggrades~., data=apply.source[,1:29], ntree=500, importance=T)
+rf.predictions <- predict(rf2,apply.source)
+nmse.rf <- mean((rf.predictions-apply.source[,"avggrades"])^2)/mean(
+  (mean(apply.source$avggrades)-apply.source[,"avggrades"])^2)
+print(nmse.rf) #0.2
+
+#first combine the rf predictions and actual scores in a single data frame
+rf.plt.data1 <- data.frame(cbind(rf.predictions,apply.source[,"avggrades"]))
+colnames(rf.plt.data1)<-c("rf.predictions","avggrades")
+
+# then create the error plot.
+errplt.rf1 <- ggplot(rf.plt.data1,aes(rf.predictions,avggrades))+
+  geom_point(aes(color=apply.source[,"Dalc"]))+
+  xlab("Predicted Grades (Random Forest with 500 Trees)")+
+  ylab("Actual Grades")+
+  geom_abline(intercept=0,slope=1,color="#0066CC",size=1)+
+  #geom_smooth(method = "lm", se = FALSE)+
+  scale_colour_brewer(palette = "Set1",name = "Daily Alcohol \nConsumption")
+#finally, plot the error plot from the random forest with the error plots of the linear and regression tree models.
+grid.arrange(errplt.rf1, errplt.lm1,errplt.rt1,nrow=3)
+
+
+varImpPlot(rf2,type=1)
+# this metric is obtained by measuring the %increase in MSE of the model if the variable is removed
+imp <- importance(rf2)
+impvar <- rownames(imp)[order(imp[, 1], decreasing=TRUE)]
+op <- par(mfrow=c(2, 3))
+for (i in seq_along(impvar)) {
+  partialPlot(rf2, apply.source[,1:29], impvar[i], rug=TRUE, xlab=impvar[i],
+              main=paste("Partial Dependence on", impvar[i]))
+  abline(h=mean(apply.source$avggrades),col="red")
+}
+par(op)
+
+imp.var <- apply.source[,c('avggrades','Pstatus','famsup','famrel','absences', 'romantic')]
+imp.var$Pstatus <- as.numeric(as.factor(imp.var$Pstatus)) -1
+# 0 represent A which indicate apart while 1 represent T which indicate together
+imp.var$famsup <- as.numeric(as.factor(imp.var$famsup)) -1
+# 0 represent no while 1 represent yes
+imp.var$romantic <- as.numeric(as.factor(imp.var$romantic)) -1
+# 0 represent no while 1 represent yes
+
+library(RColorBrewer)
+require(corrplot)
+corrplot(cor(imp.var), method="pie", addrect = 4, type = 'upper',
+         tl.pos = 'tp', col=brewer.pal(n=8, name="RdYlBu"))
+corrplot(cor(imp.var), add = TRUE, type = 'lower', method = 'number',
+         col = 'black', diag = FALSE, tl.pos = 'n', cl.pos = 'n')
 
 
 
