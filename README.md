@@ -4,10 +4,10 @@
 * ID: B06208002
 * Dep.:NTU Geography
 * Task each week
-    [WEEK1_HW](https://cartus0910.github.io/2018SUMMER_R/week1/hw1.html)
-    [WEEK2_HW1](https://cartus0910.github.io/2018SUMMER_R/week2/0711morning.html) | [WEEK2_HW2](https://cartus0910.github.io/2018SUMMER_R/week2/0711afternoon.html) | [WEEK2_EXTRA](https://cartus0910.github.io/2018SUMMER_R/week2/geog_paper.html) 
-    [WEEK3_HW1](https://cartus0910.github.io/2018SUMMER_R/week3/0718morning.html) | [WEEK3_PARTIAL](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon_only_TF-IDF_.html) | [WEEK3_HW2](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon.html) 
-    [WEEK4_HW](https://cartus0910.github.io/2018SUMMER_R/week4/0725morning.html)
+    1. [WEEK1_HW](https://cartus0910.github.io/2018SUMMER_R/week1/hw1.html)
+    2. [WEEK2_HW1](https://cartus0910.github.io/2018SUMMER_R/week2/0711morning.html) | [WEEK2_HW2](https://cartus0910.github.io/2018SUMMER_R/week2/0711afternoon.html) | [WEEK2_EXTRA](https://cartus0910.github.io/2018SUMMER_R/week2/geog_paper.html) 
+    3. [WEEK3_HW1](https://cartus0910.github.io/2018SUMMER_R/week3/0718morning.html) | [WEEK3_PARTIAL](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon_only_TF-IDF_.html) | [WEEK3_HW2](https://cartus0910.github.io/2018SUMMER_R/week3/0718afternoon.html) 
+    4. [WEEK4_HW](https://cartus0910.github.io/2018SUMMER_R/week4/0725morning.html)
 
 ## WEEK 1
 [week1_link](https://n2-data-science-programming.gitbook.io/rsummer/week_1)
