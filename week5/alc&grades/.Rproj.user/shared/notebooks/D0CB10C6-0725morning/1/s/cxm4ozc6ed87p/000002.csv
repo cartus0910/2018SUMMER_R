@@ -1,0 +1,13 @@
+"0","data.source$mathgrades=rowMeans(cbind(data.source$G1.x,data.source$G2.x,data.source$G3.x))"
+"0","data.source$portgrades=rowMeans(cbind(data.source$G1.y,data.source$G2.y,data.source$G3.y))"
+"0","library(plyr)"
+"0","data.source$Dalc <- as.factor(data.source$Dalc)      "
+"0","data.source$Dalc <- mapvalues(data.source$Dalc, "
+"0","                              from = 1:5, "
+"0","                              to = c(""Very Low"", ""Low"", ""Medium"", ""High"", ""Very High""))"
+"2","The following `from` values were not present in `x`: 4, 5
+"
+"0","data.source$Walc <- as.factor(data.source$Walc)      "
+"0","data.source$Walc <- mapvalues(data.source$Walc, "
+"0","                              from = 1:5, "
+"0","                              to = c(""Very Low"", ""Low"", ""Medium"", ""High"", ""Very High""))"

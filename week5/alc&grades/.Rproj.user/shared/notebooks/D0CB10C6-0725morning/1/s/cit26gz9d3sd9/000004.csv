@@ -1,0 +1,4 @@
+"0","library(rpart)"
+"0","library(DMwR)"
+"0","regtree <- rpart(apply.source$avggrades~., data=apply.source[,1:29])"
+"0","prettyTree(regtree)"

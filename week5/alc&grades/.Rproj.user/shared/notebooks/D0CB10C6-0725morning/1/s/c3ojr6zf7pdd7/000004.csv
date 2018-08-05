@@ -1,0 +1,7 @@
+"0","str3=ggplot(apply.source, aes(x=Dalc, y=avggrades, group=Dalc)) +"
+"0","  geom_boxplot() + theme(legend.position=""none"") + scale_fill_manual(values=waffle.col) +"
+"0","  xlab(""Alcohol consumption"") + ylab(""Daily Average Grades"") + ggtitle(""Average Grade"")"
+"0","str4=ggplot(apply.source, aes(x=Walc, y=avggrades, group=Walc)) +"
+"0","  geom_boxplot() + theme(legend.position=""none"") + scale_fill_manual(values=waffle.col) +"
+"0","  xlab(""Alcohol consumption"") + ylab(""Weekend Average Grades"") + ggtitle(""Average Grade"")"
+"0","grid.arrange(str3,str4,nrow=2)"

@@ -1,0 +1,13 @@
+name: alc_and_grades
+title: alc_and_grades
+username:
+account: cartus0910
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 393018
+bundleId: 1510978
+url: https://cartus0910.shinyapps.io/alc_and_grades/
+when: 1533102858.89933
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: app.R

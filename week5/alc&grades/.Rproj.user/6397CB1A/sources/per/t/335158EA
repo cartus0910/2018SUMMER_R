@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1533104891161.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "763243481",
+    "id" : "335158EA",
+    "lastKnownWriteTime" : 1532867465,
+    "last_content_update" : 1533104942614,
+    "path" : "D:/2018.07 R_DataAnalysis/2018SUMMER_R/week4/0725morning.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "152,62",
+        "scrollLine" : "145"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

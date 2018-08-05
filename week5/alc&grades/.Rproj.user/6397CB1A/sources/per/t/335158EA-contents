@@ -1,0 +1,343 @@
+---
+title: "Alcohol Consumption and Grades"
+author: "CARTUS YOU"
+date: "2018年7月27日"
+output: html_document
+---
+
+## **PART I Purpose**
+Examines whether **alcohol consumption** has any predictive power over student **average grades**.
+
+***
+
+> #### **Preparation**
+
+* Set the working direction and import data.
+* Merge the data by columns but **not including which related to grdes**, since we don't know whether the alcohol consumption have different influences between math and portugueses grades yet.
+```{r}
+setwd("D:/2018.07 R_DataAnalysis/2018SUMMER_R/data")
+
+ptgs.course <- read.csv("student-por.csv")
+math.course <- read.csv("student-mat.csv")
+
+data.source <- merge(ptgs.course,math.course,by=c("school","sex","age","address","famsize","Pstatus",
+                                                  "Medu","Fedu","Mjob","Fjob","reason","nursery","internet",
+                                                  "guardian","guardian","traveltime","studytime","failures",
+                                                  "schoolsup","famsup","activities","higher","romantic",
+                                                  "famrel","freetime","goout","Dalc","Walc","health","absences"))
+head(data.source)
+```
+```{r}
+summary(data.source)
+```
+
+> #### **EDA**
+
+* Calculate the mean of both grades.
+* Change the expression of alcohol consumption.
+```{r include=FALSE}
+data.source$mathgrades=rowMeans(cbind(data.source$G1.x,data.source$G2.x,data.source$G3.x))
+data.source$portgrades=rowMeans(cbind(data.source$G1.y,data.source$G2.y,data.source$G3.y))
+
+library(plyr)
+data.source$Dalc <- as.factor(data.source$Dalc)      
+data.source$Dalc <- mapvalues(data.source$Dalc, 
+                              from = 1:5, 
+                              to = c("Very Low", "Low", "Medium", "High", "Very High"))
+data.source$Walc <- as.factor(data.source$Walc)      
+data.source$Walc <- mapvalues(data.source$Walc, 
+                              from = 1:5, 
+                              to = c("Very Low", "Low", "Medium", "High", "Very High"))
+```
+
+> #### **Plot**
+
+* Plot a sacatter to see the relationships bwtween alcohol consumption and grades.
+* The two scatter plots have few implications:
+  1. Among the 85 students, **no one consumed high or very high levels of alcohol on workday basis**.
+  2. Almost all of those **who earned relatively high scores consumed very low levels of alcohol on weekend basis**.
+  3. Math and Portuguese grades seem to **correlate highly** with each other.
+```{r}
+library(ggplot2)
+str1=ggplot(data.source, aes(x=mathgrades, y=portgrades)) +
+  geom_point(aes(colour=factor(Dalc)))+ scale_colour_hue(l=25,c=150)+
+  geom_smooth(method = "lm", se = FALSE)
+str2=ggplot(data.source, aes(x=mathgrades, y=portgrades))+
+  geom_point(aes(colour=factor(Walc)))+ scale_colour_hue(l=25,c=150)+
+  geom_smooth(method = "lm", se = FALSE)
+library(gridExtra)
+grid.arrange(str1,str2,nrow=2)
+```
+
+* By the implication 3, I think that **it's acceptable to combine the two grades together** without worrying the lost of features.
+* To be cautious, I still calculated the adjusted R squared to make sure it works.
+* The R squared is about 0.55, which means that the correlation coefficient between math and Portuguese grades is **about 0.74 and that about 55% of the variation** in Portuguese grades can be explained by the variation in math grades.
+```{r}
+reg1 <- lm(mathgrades ~ portgrades, data=data.source)
+print(summary(reg1)$r.squared)
+print(sqrt(summary(reg1)$r.squared))
+```
+
+> #### **Create New Dataframe**
+
+* Combine the original data by rows.
+* Create a new column(alcohol) to separate the students into two groups:**having alcoholic consumption, and not.**
+```{r}
+library(dplyr)
+new.source <-rbind(math.course, ptgs.course) #combine the two datasets
+# and eliminate the repeats:
+apply.source <- new.source %>% distinct(school,sex,age,address,famsize,Pstatus,Medu,Fedu,Mjob,Fjob,reason,
+                                        guardian,traveltime,studytime,failures,schoolsup,
+                                        famsup,activities,nursery,higher,internet,romantic,
+                                        famrel,freetime,goout,Dalc,Walc,health,absences, .keep_all = TRUE)
+apply.source$avggrades <- rowMeans(cbind(apply.source$G1,apply.source$G2,apply.source$G3))
+apply.source$alcohol <- apply.source$Dalc + apply.source$Walc
+apply.source$alcohol <- as.factor(apply.source$alcohol)
+apply.source$alc <- mapvalues(apply.source$alcohol, 
+                              from = 2:10,
+                              to = c("no","yes","yes","yes","yes","yes","yes","yes","yes"))
+head(apply.source)
+```
+
+
+> #### **T-Test**
+
+* Is having alcohol consumption or not influence the their academic performance?
+* So h0 = "Having alcohol consumption or not **will not influence** the their academic performance?" and h1 = "Having alcohol consumption or not **will influence** the their academic performance?"
+* P-value < 0.05, so h0 is rejected in favor of h1 within the 95% confidence interval.
+```{r}
+t.test(avggrades ~ alc, data=apply.source)
+```
+> #### **Plot**
+
+* Now we know that having alcohol consumption or not could influence academic performance, but how?
+* Plot to see how workday and weekend alcohol consumption influence on average grades.
+* In the boxplot, we can see students with very low consumption do gain higher grades; however, **students with very high alcohol consumption don't have the lowest grades.**
+```{r}
+str3=ggplot(apply.source, aes(x=Dalc, y=avggrades, group=Dalc)) +
+  geom_boxplot() + theme(legend.position="none") + scale_fill_manual(values=waffle.col) +
+  xlab("Alcohol consumption") + ylab("Daily Average Grades") + ggtitle("Average Grade")
+str4=ggplot(apply.source, aes(x=Walc, y=avggrades, group=Walc)) +
+  geom_boxplot() + theme(legend.position="none") + scale_fill_manual(values=waffle.col) +
+  xlab("Alcohol consumption") + ylab("Weekend Average Grades") + ggtitle("Average Grade")
+grid.arrange(str3,str4,nrow=2)
+```
+#### **Thus, levels of alcohol consumption have a limited predict power over their grades.**
+
+## **Part II Purpose**
+1. Examine which variable has the most predicative power over student grades.
+2. Build model to predict the grades.
+
+> #### **Preparation**
+
+* Since failure times is another aspect of grades, it would be meaningless to run T-test with it, so I would just drop it from the data.
+```{r}
+failureind <- which(names(apply.source)=="failures")
+apply.source <- apply.source[,-failureind]
+```
+
+> #### **Linear Regression Model**
+
+* Use linear model to find the variables having significant impact on grades, which are **studytime, schoolsup(Extra educational support), higher(Wants to take higher education).**
+```{r}
+reg2 <- lm(apply.source$avggrades ~ ., data=apply.source[, 1:29])
+summary(reg2)
+```
+
+> #### **ANOVA**
+
+* Now I would like to check the three variables found above is more important in this model.
+* In other words, if I have to remove one variable within them, which would impact the result the most.
+* As the result, we can tell that **aiming to having higher education or not** is the most important variable.
+```{r}
+m1 <- lm(apply.source$avggrades ~ studytime, data=apply.source)
+m2 <- lm(apply.source$avggrades ~ higher, data=apply.source)
+m3 <- lm(apply.source$avggrades ~ schoolsup, data=apply.source)
+m4 <- update(m3, . ~ . + studytime + higher,  data = apply.source)
+res_lm <- lapply(list(m1, m2, m3, m4), summary)
+(res_lm[[4]]$r.sq - res_lm[[1]]$r.sq)/res_lm[[4]]$r.sq
+anova(m1, m4)
+```
+
+```{r}
+(res_lm[[4]]$r.sq - res_lm[[2]]$r.sq)/res_lm[[4]]$r.sq
+anova(m2, m4)
+```
+
+```{r}
+(res_lm[[4]]$r.sq - res_lm[[3]]$r.sq)/res_lm[[4]]$r.sq
+anova(m3, m4)
+```
+
+> #### **Regression Tree Model**
+
+* We use the regression tree to determine the variables in the new model.
+* According the regression tree below, we found:
+  1. The overwhelming majority of surveyed students would like to **pursue higher education** and their average grades (11.4/20) is significantly higher than the average grades of those who don't (8.47/20).
+  2. **Mother's education** is another important feature (interestingly, this feature **did not come up as important** in the linear regression model) if you aim to pursue higher education.
+  3. Extra educational support also have great impact on student's grades if you aim to pursue higher education and your mother have higher education levels. Student **without extra educational support have higher average grades** (12.5/20) than those who do (9.78/20). It's kinda **out of universal expetaction**.
+```{r}
+library(rpart)
+library(DMwR)
+regtree <- rpart(apply.source$avggrades~., data=apply.source[,1:29])
+prettyTree(regtree)
+```
+
+> #### **Normalized Mean Squared Error(NMSE)**
+
+* Before getting into cross-validation, I want to have a simple look at the validation of these two model, so I choose to calculate their NMSE to see which one works better.
+* The NMSE of these two model is high, which may indicate that **the results would not be quite valid** at all, but it seems like **linear regression works better** than the regression tree.
+```{r}
+#predictions
+apply.source$Dalc <- as.numeric(apply.source$Dalc)
+lm.predictions <- predict(reg2,apply.source)
+rt.predictions <- predict(regtree,apply.source)
+nmse.lm<-mean((lm.predictions-apply.source[,"avggrades"])^2)/mean(
+  (mean(apply.source$avggrades)-apply.source[,"avggrades"])^2)
+nmse.rt<-mean((rt.predictions-apply.source[,"avggrades"])^2)/mean(
+  (mean(apply.source$avggrades)-apply.source[,"avggrades"])^2)
+print(nmse.lm) #0.79
+print(nmse.rt) #0.85
+```
+
+> #### **Plot**
+
+* Now let's see the error scatter plot which the two model predicted.
+* Unfortunately, as the NMSEs and error plots indicate, neither of the two models seems to do a decent job in predicting student average grades.
+```{r}
+lm.plt.data1=data.frame(cbind(lm.predictions,apply.source[,"avggrades"]))
+colnames(lm.plt.data1) <- c("lm.predictions","avggrades")
+rt.plt.data1=data.frame(cbind(rt.predictions,apply.source[,"avggrades"]))
+colnames(rt.plt.data1) <- c("rt.predictions","avggrades")
+
+apply.source$Dalc <- as.factor(apply.source$Dalc)
+
+errplt.lm1 <- ggplot(lm.plt.data1,aes(lm.predictions,avggrades))+
+  geom_point(aes(color=apply.source[,"Dalc"]))+
+  xlab("Predicted Grades (Linear Model)")+
+  ylab("Actual Grades")+
+  geom_abline(intercept=0,slope=1,color="#00cc4e",size=1)+
+  geom_smooth(method = "lm", se = FALSE)+
+  scale_colour_brewer(palette = "Set1",name = "Daily Alcohol \nConsumption")
+
+errplt.rt1 <- ggplot(rt.plt.data1,aes(rt.predictions,avggrades))+
+  geom_point(aes(color=apply.source[,"Dalc"]))+
+  xlab("Predicted Grades (Regression Tree)")+
+  ylab("Actual Grades")+
+  geom_abline(intercept=0,slope=1,color="#00cc4e",size=1)+
+  geom_smooth(method = "lm", se = FALSE)+
+  scale_colour_brewer(palette = "Set1",name = "Daily Alcohol \nConsumption")
+
+grid.arrange(errplt.lm1,errplt.rt1,nrow=2)
+```
+
+> #### **Random Forest Model**
+
+* Since the two model above do not work well, I would insteadly use **random forest** model to make another attempt.
+* Set the seed in oreder to get the same result every time.
+* Use random forest with 500 trees to predict the grades.
+* Calculate the NMSE of this model, and then get the result of about 0.2, which indicate that **this model is more valid** than the ones above.
+```{r}
+library(randomForest)
+set.seed(8000)
+rf2 <- randomForest(apply.source$avggrades~., data=apply.source[,1:29], ntree=500, importance=T)
+rf.predictions <- predict(rf2,apply.source)
+nmse.rf <- mean((rf.predictions-apply.source[,"avggrades"])^2)/mean(
+  (mean(apply.source$avggrades)-apply.source[,"avggrades"])^2)
+print(nmse.rf) #0.2
+```
+
+> #### **Plot**
+
+* Now I am going to obtain the error plot of the random forest and compare it with the error plots of the linear and regression tree models obtained above.
+* As the plot showing, **the random forest model works well** comparing to the others, though it seems to **underpredict the grades of the group of lower grades student**, and **overpredict the grades of the group of higher grades students**.
+* According to the the [document of random forest](https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm#ooberr):
+
+> *The out-of-bag (oob) error estimate: In random forests, there is no need for cross-validation or a separate test set to get an unbiased estimate of the test set error. It is estimated internally , during the run...*
+
+it seems like due to the build-in algorithms that I don't really know, **it's not necessary to run a cross validation** to ensure the stablity of the random forest model, HURRAY!
+```{r}
+#first combine the rf predictions and actual scores in a single data frame
+rf.plt.data1 <- data.frame(cbind(rf.predictions,apply.source[,"avggrades"]))
+colnames(rf.plt.data1)<-c("rf.predictions","avggrades")
+
+# then create the error plot.
+errplt.rf1 <- ggplot(rf.plt.data1,aes(rf.predictions,avggrades))+
+  geom_point(aes(color=apply.source[,"Dalc"]))+
+  xlab("Predicted Grades (Random Forest with 500 Trees)")+
+  ylab("Actual Grades")+
+  geom_abline(intercept=0,slope=1,color="#0066CC",size=1)+
+  #geom_smooth(method = "lm", se = FALSE)+
+  scale_colour_brewer(palette = "Set1",name = "Daily Alcohol \nConsumption")
+#finally, plot the error plot from the random forest with the error plots of the linear and regression tree models.
+grid.arrange(errplt.rf1, errplt.lm1,errplt.rt1,nrow=3)
+
+```
+
+> #### **Relative Importance in Random Forest Model**
+
+* Now I'll plot to see **which variables are important** in this model
+* As you can see the relatively high important variables are below:
+  1. higher- wants to take higher education (binary: yes or no)
+  2. Medu - mother's education (numeric: 0 - none, 1 - primary education (4th grade), 2 – 5th to 9th grade, 3 - secondary education or 4 – higher education)
+  3. studytime - weekly study time (numeric: 1 - <2 hours, 2 - 2 to 5 hours, 3 - 5 to 10 hours, or 4 - >10 hours)
+  4. reason - reason to choose this school (nominal: close to 'home', school 'reputation', 'course' preference or 'other')
+  5. schoolsup - extra educational support (binary: yes or no)
+  It's worth mentioning that the **alcohol assumption also play a important role** in this model, but not quite crucial. This result **corroborate the conclusion in PART I**, which indicate that alcohol assumption have a limited predictive power on grades, is trustworthy.
+```{r}
+varImpPlot(rf2,type=1)
+```
+
+> #### **Partial Dependance**
+
+* Now I am going to produce a partial dependence plot for each feature in the best performing Random Forest model with 500 trees., giving a graphical depiction of **the marginal effect** of a feature on the response.
+```{r}
+imp <- importance(rf2)
+impvar <- rownames(imp)[order(imp[, 1], decreasing=TRUE)]
+op <- par(mfrow=c(2, 3))
+for (i in seq_along(impvar)) {
+  partialPlot(rf2, apply.source[,1:29], impvar[i], rug=TRUE, xlab=impvar[i],
+              main=paste("Partial Dependence on", impvar[i]))
+  abline(h=mean(apply.source$avggrades),col="red")
+}
+par(op)
+
+```
+
+> #### **Correlation Plot**
+
+* Now give a look at some features which would be **conventionally thought as important**.
+* As the numerous models and tests above shows, these features are **not important at all**.
+```{r}
+imp.var <- apply.source[,c('avggrades','Pstatus','famsup','famrel','absences', 'romantic')]
+imp.var$Pstatus <- as.numeric(as.factor(imp.var$Pstatus)) -1
+# 0 represent A which indicate apart while 1 represent T which indicate together
+imp.var$famsup <- as.numeric(as.factor(imp.var$famsup)) -1
+# 0 represent no while 1 represent yes
+imp.var$romantic <- as.numeric(as.factor(imp.var$romantic)) -1
+# 0 represent no while 1 represent yes
+
+library(RColorBrewer)
+require(corrplot)
+corrplot(cor(imp.var), method="pie", addrect = 4, type = 'upper',
+         tl.pos = 'tp', col=brewer.pal(n=8, name="RdYlBu"))
+corrplot(cor(imp.var), add = TRUE, type = 'lower', method = 'number',
+         col = 'black', diag = FALSE, tl.pos = 'n', cl.pos = 'n')
+```
+
+## **Conclusion**
+
+1. While alcohol consumption on weekdays and weekends are **not the strongest predictor** of student average grades, they are in the **top 10 (out of 29)**. The two strongest predictors of student average grade are **the willingness to pursue higher education (higher)** and **mother's education (Medu)**.
+2. The best model to predict the students' grades is the **random forest model with 500 trees**, but still **got some deficiency** like overpredict the grades of student with higher grades, and underpredict the grades of students with very low grades.
+3. The conventionally considered as important factors that could affect grades are not important in this analysis.
+4. ##### **Statistic is funny though exhausting LOL**.
+
+
+
+
+
+
+
+
+
+

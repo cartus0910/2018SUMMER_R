@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1533102343402.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "584869714",
+    "id" : "125A8B9",
+    "lastKnownWriteTime" : 1533102637,
+    "last_content_update" : 1533102637911,
+    "path" : "D:/2018.07 R_DataAnalysis/2018SUMMER_R/week5/alc&grades/app.R",
+    "project_path" : "app.R",
+    "properties" : {
+        "cursorPosition" : "7,1",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

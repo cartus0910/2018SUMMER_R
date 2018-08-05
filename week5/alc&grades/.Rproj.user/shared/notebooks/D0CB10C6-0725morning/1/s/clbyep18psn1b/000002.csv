@@ -1,0 +1,38 @@
+"0","library(dplyr)"
+"2","
+Attaching package: ．dplyr・
+
+"
+"2","The following objects are masked from ．package:plyr・:
+
+    arrange, count, desc, failwith, id, mutate, rename, summarise, summarize
+
+"
+"2","The following object is masked from ．package:gridExtra・:
+
+    combine
+
+"
+"2","The following objects are masked from ．package:stats・:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ．package:base・:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","new.source <-rbind(math.course, ptgs.course) #combine the two datasets"
+"0","# and eliminate the repeats:"
+"0","apply.source <- new.source %>% distinct(school,sex,age,address,famsize,Pstatus,Medu,Fedu,Mjob,Fjob,reason,"
+"0","                                        guardian,traveltime,studytime,failures,schoolsup,"
+"0","                                        famsup,activities,nursery,higher,internet,romantic,"
+"0","                                        famrel,freetime,goout,Dalc,Walc,health,absences, .keep_all = TRUE)"
+"0","apply.source$avggrades <- rowMeans(cbind(apply.source$G1,apply.source$G2,apply.source$G3))"
+"0","apply.source$alcohol <- apply.source$Dalc + apply.source$Walc"
+"0","apply.source$alcohol <- as.factor(apply.source$alcohol)"
+"0","apply.source$alc <- mapvalues(apply.source$alcohol, "
+"0","                              from = 2:10,"
+"0","                              to = c(""no"",""yes"",""yes"",""yes"",""yes"",""yes"",""yes"",""yes"",""yes""))"
+"0","head(apply.source)"
