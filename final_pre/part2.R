@@ -13,8 +13,8 @@ gender_map <- merge(worldmap, raw_gender, by="Country.Code")
 library(stringr)
 for (i in 15:ncol(gender_map)-1){
   names(gender_map)[i] <- str_sub(names(gender_map)[i],-5,-2)
-  if(i < 41){
-    gender_map[i+1] <- (gender_map[[i+1]] + gender_map[[i]]) /2
+  if((i >= 17) == (i < 41)){
+    gender_map[i+1] <- (gender_map[[i+1]] + gender_map[[i]] + gender_map[[i-1]] + gender_map[[i-2]]) /4
   }
 }
 
@@ -33,16 +33,13 @@ ath2C<-data.frame(ath2B[,1],ath2B[,3])
 ath3<-merge(ath2C,ath1B,by="NOC")
 ath3["Fscore"]=(ath3[,2]/ath3[,3])
 
-
 #plotting
 gender_map%>%
-  filter(Series.Name == 'Employers, female (% of female employment) (modeled ILO estimate)')%>%
-  select('2014')%>%
+  filter(Series.Name == 'Adjusted net enrollment rate, primary, female (% of primary school age children)')%>%
+  select('2010')%>%
   ggplot() +
-  geom_sf(aes(fill=`2014`))+
+  geom_sf(aes(fill=`2010`))+
   scale_fill_gradient(low = "#FFE4F3", high = "#F62018")
-
-
 
 
 
