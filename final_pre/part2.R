@@ -20,19 +20,12 @@ for (i in 15:ncol(gender_map)-1){
 
 library(tidyr)
 ath<- read.csv("athlete_wewant.csv")
-ath['num']=1
 
-ath1<-ath%>%filter(Year>=1990)%>%group_by(NOC,Year,Sex)%>%summarize(Medal_sum=sum(Medal_score),people=sum(num))
-ath1A<-ath%>%filter(Year>=1990)%>%group_by(NOC,Year)%>%summarize(join_people=sum(num))
-ath1B<-unite(ath1A,NOC,NOC,Year,sep='_')
+x <- gender_map%>%
+  filter(Series.Name == 'Adjusted net enrollment rate, primary, female (% of primary school age children)')%>%
+  select('2010')
 
-ath2A<-ath1%>%filter(Sex=="F")
-ath2B<-unite(ath2A,NOC,NOC,Year,sep='_')
-ath2C<-data.frame(ath2B[,1],ath2B[,3])
-
-ath3<-merge(ath2C,ath1B,by="NOC")
-ath3["Fscore"]=(ath3[,2]/ath3[,3])
-
+library(dplyr)
 #plotting
 gender_map%>%
   filter(Series.Name == 'Adjusted net enrollment rate, primary, female (% of primary school age children)')%>%
